@@ -1,9 +1,13 @@
-import React from 'react';
+import NavBar from "../../components/navbar/NavBar";
+import Header from "../../components/header/Header";
 
 export const ListHotel = () => {
   return (
-    <div>ListHotel</div>
-  )
-}
+    <div>
+      <NavBar />
+      <Header type="list" />
+    </div>
+  );
+};
 
 export default ListHotel;
