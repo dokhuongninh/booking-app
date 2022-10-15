@@ -13,6 +13,7 @@ import { format } from "date-fns";
 import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Header = ({ type }) => {
   const [openDate, setOpenDate] = useState(false);
@@ -23,11 +24,25 @@ const Header = ({ type }) => {
       key: "selection",
     },
   ]);
-  //   useEffect(() => {
-  //     if (openDate && date.startDate && date.endDate) {
-  //       setOpenDate(false);
-  //     }
-  //   }, [date.startDate, date.endDate, openDate]);
+
+  // const startDatePrev = useMemo(() => {
+  //   return date.startDate;
+  // }, [date.startDate]);
+
+  // const endDatePrev = useMemo(() => {
+  //   return format(date.endDate, "dd/MM/yyyy");
+  // }, [date.endDate]);
+
+  // useEffect(() => {
+  //   if (
+  //     openDate &&
+  //     format(date.startDate, "dd/MM/yyyy") !==
+  //       format(startDatePrev, "dd/MM/yyyy") &&
+  //     format(date.endDate, "dd/MM/yyyy") !== format(endDatePrev, "dd/MM/yyyy")
+  //   ) {
+  //     setOpenDate(false);
+  //   }
+  // }, [date.startDate, date.endDate, openDate, startDatePrev, endDatePrev]);
 
   const [openOptions, setOpenOptions] = useState(false);
   const [options, setOptions] = useState({
@@ -47,6 +62,12 @@ const Header = ({ type }) => {
         [name]: operation === "i" ? options[name] + 1 : options[name] - 1,
       };
     });
+  };
+
+  const [destination, setDestination] = useState("");
+  const navigate = useNavigate();
+  const handleSearch = () => {
+    navigate("/hotels", { state: { destination, date, options } });
   };
 
   return (
@@ -95,6 +116,7 @@ const Header = ({ type }) => {
                   type="text"
                   placeholder="Where are you going?"
                   className="headerSearchInput"
+                  onChange={(e) => setDestination(e.target.value)}
                 />
               </div>
               <div className="headerSearchItem">
@@ -112,6 +134,7 @@ const Header = ({ type }) => {
                     onChange={(item) => setDate([item.selection])}
                     moveRangeOnFirstSelection={false}
                     ranges={date}
+                    minDate={new Date()}
                     className="date"
                   />
                 )}
@@ -193,7 +216,9 @@ const Header = ({ type }) => {
                 </span>
               </div>
               <div className="headerSearchItem">
-                <button className="headerBtn">Search</button>
+                <button className="headerBtn" onClick={handleSearch}>
+                  Search
+                </button>
               </div>
             </div>
           </>
